@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título, descripción, redes sociales y datos del negocio: los genera construir.mjs desde datos.js -->
+  <!--auto:head--><title>Electricista, fontanero y climatización a domicilio | Tuerca</title>
+  <meta name="description" content="Electricidad, fontanería y climatización a domicilio. Cuéntanos qué se ha roto y te damos precio cerrado antes de ir.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Tuerca">
+  <meta property="og:title" content="Electricista, fontanero y climatización a domicilio | Tuerca">
+  <meta property="og:description" content="Electricidad, fontanería y climatización a domicilio. Cuéntanos qué se ha roto y te damos precio cerrado antes de ir."><!--/auto:head-->
+
+  <meta name="theme-color" content="#182638">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- La portada es lo más pesado de la página: se empieza a bajar antes de leer el CSS -->
+  <link rel="preload" as="image" href="img/portada-900.webp" type="image/webp" media="(max-width: 640px)">
+  <link rel="preload" as="image" href="img/portada.webp" type="image/webp" media="(min-width: 641px)">
+
+  <script>document.documentElement.classList.add("js");</script>
+
+
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- CABECERA -->
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a href="#" class="marca" aria-label="Tuerca, inicio">
+        <svg class="marca__icono" viewBox="0 0 40 40" aria-hidden="true">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" />
+          <circle cx="20" cy="20" r="7" />
+        </svg>
+        <span class="marca__nombre" data-config="nombre">tuerca</span>
+      </a>
+
+      <nav class="menu" id="menu" aria-label="Principal">
+        <a href="#servicios">Servicios</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#trabajos" data-seccion="trabajos">Trabajos</a>
+        <a href="#opiniones" data-seccion="opiniones">Opiniones</a>
+        <a href="#preguntas">Preguntas</a>
+        <a href="#zona">Zona y horario</a>
+      </nav>
+
+      <a class="boton boton--telefono" data-config="telefono-enlace" href="tel:+34600000000" aria-label="Llamar por teléfono">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        <span data-config="telefono">600 000 000</span>
+      </a>
+
+      <button type="button" class="hamburguesa" id="hamburguesa" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <a class="whatsapp-flotante" data-config="whatsapp-enlace" href="https://wa.me/34600000000" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm-3 6h6a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2zm0 4h4a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2z"/></svg>
+    <span>WhatsApp</span>
+  </a>
+
+  <main>
+
+    <!-- PORTADA: foto de fondo a pantalla completa con el titular encima -->
+    <section class="portada">
+      <!-- La foto va en CSS (.portada__fondo). Para cambiarla, mira css/estilos.css -->
+      <div class="portada__fondo" aria-hidden="true"></div>
+
+      <div class="contenedor portada__contenido">
+        <h1 class="portada__h1">
+          <span class="portada__servicios" data-config="lineaServicios">Electricidad, fontanería y climatización</span>
+          <span class="portada__titulo">¿Qué se ha roto?</span>
+        </h1>
+        <p class="portada__entradilla">
+          Cuéntanos qué pasa y te damos precio antes de ir.
+          Vamos a tu casa, lo arreglamos y recogemos.
+        </p>
+        <div class="portada__acciones">
+          <a href="#parte" class="boton boton--principal">Contar mi problema</a>
+          <a data-config="telefono-enlace" href="tel:+34600000000" class="boton boton--claro">
+            Llamar al <span data-config="telefono">600 000 000</span>
+          </a>
+        </div>
+      </div>
+
+      <ul class="contenedor portada__garantias">
+        <li>Presupuesto sin compromiso</li>
+        <li>Precio cerrado antes de empezar</li>
+        <li>Urgencias el mismo día</li>
+      </ul>
+    </section>
+
+    <!-- EL PARTE: formulario para explicar el problema, montado sobre el final de la foto -->
+    <section class="solicitud" aria-labelledby="parte-titulo">
+      <div class="contenedor solicitud__rejilla">
+
+        <div class="solicitud__texto">
+          <h2 class="seccion__titulo">Explícanos tu problema</h2>
+          <p class="seccion__entradilla">
+            Con tres datos nos basta para darte un precio. Si puedes, luego mándanos
+            una foto por WhatsApp: con ella el precio sale mucho más ajustado.
+          </p>
+
+          <div class="ayuda">
+            <h3 class="ayuda__titulo">Para darte precio más rápido, ten a mano</h3>
+            <ul class="ayuda__lista" id="lista-consejos"><!--auto:lista-consejos--><li>Una foto o un vídeo corto del problema</li><li>Marca y modelo, si es un aparato: termo, aire, cuadro eléctrico…</li><li>Desde cuándo pasa y si has probado algo</li><!--/auto:lista-consejos--></ul>
+
+            <div class="ayuda__despues">
+              <span class="ayuda__etiqueta">Y después</span>
+              <p data-config="tiempoRespuesta">Te respondemos el mismo día laborable con un precio o con las preguntas que falten.</p>
+            </div>
+
+            <div class="ayuda__contacto">
+              <p>¿Prefieres no rellenar nada?</p>
+              <div class="ayuda__botones">
+                <a class="boton boton--contacto" data-config="telefono-enlace" href="tel:+34600000000">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+                  <span data-config="telefono">600 000 000</span>
+                </a>
+                <a class="boton boton--contacto" data-config="whatsapp-enlace" href="https://wa.me/34600000000" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm-3 6h6a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2zm0 4h4a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2z"/></svg>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="parte" id="parte" novalidate>
+          <div class="parte__cabeza">
+            <h3 class="parte__titulo" id="parte-titulo">Parte de trabajo</h3>
+            <span class="parte__numero">Nº <span id="parte-numero">0000</span></span>
+          </div>
+
+          <fieldset class="parte__campo">
+            <legend>¿De qué se trata?</legend>
+            <div class="opciones" id="opciones-servicio"><!--auto:opciones-servicio-->
+      <label class="opcion">
+        <input type="radio" name="servicio" value="electricidad">
+        <span>Electricidad</span>
+      </label>
+      <label class="opcion">
+        <input type="radio" name="servicio" value="fontaneria">
+        <span>Fontanería</span>
+      </label>
+      <label class="opcion">
+        <input type="radio" name="servicio" value="climatizacion">
+        <span>Climatización</span>
+      </label>
+      <label class="opcion">
+        <input type="radio" name="servicio" value="reparaciones">
+        <span>Pequeños arreglos</span>
+      </label><!--/auto:opciones-servicio--></div>
+          </fieldset>
+
+          <fieldset class="parte__campo">
+            <legend>¿Para cuándo?</legend>
+            <div class="opciones">
+              <label class="opcion">
+                <input type="radio" name="urgencia" value="Urgente, hoy mismo">
+                <span>Urgente, hoy</span>
+              </label>
+              <label class="opcion">
+                <input type="radio" name="urgencia" value="Esta semana" checked>
+                <span>Esta semana</span>
+              </label>
+              <label class="opcion">
+                <input type="radio" name="urgencia" value="Sin prisa">
+                <span>Sin prisa</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="parte__campo">
+            <label for="descripcion">Cuéntanos qué pasa</label>
+            <textarea id="descripcion" name="descripcion" rows="3"
+              placeholder="Ej.: el enchufe de la cocina hace chispas al enchufar la tostadora"></textarea>
+          </div>
+
+          <div class="parte__dos">
+            <div class="parte__campo">
+              <label for="nombre">Tu nombre</label>
+              <input id="nombre" name="nombre" type="text" autocomplete="given-name">
+            </div>
+            <div class="parte__campo">
+              <label for="localidad">Barrio o pueblo</label>
+              <input id="localidad" name="localidad" type="text" autocomplete="address-level2">
+            </div>
+          </div>
+
+          <p class="parte__error" id="parte-error" role="alert" hidden></p>
+
+          <button type="submit" class="boton boton--enviar">Enviar por WhatsApp</button>
+          <p class="parte__pie">
+            Se abrirá WhatsApp con el parte ya escrito. ¿Prefieres hablar?
+            <a data-config="telefono-enlace" href="tel:+34600000000">Llama al <span data-config="telefono">600 000 000</span></a>
+          </p>
+          <p class="parte__legal">
+            Usaremos tus datos solo para darte precio y organizar el trabajo.
+            <a href="privacidad.html">Más información</a>.
+          </p>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="servicios" id="servicios">
+      <div class="contenedor">
+        <h2 class="seccion__titulo">Lo que arreglamos</h2>
+        <p class="seccion__entradilla" data-config="notaPrecios">Precios orientativos de mano de obra, IVA incluido. El precio final te lo decimos antes de empezar, nunca después.</p>
+        <div class="servicios__lista" id="lista-servicios"><!--auto:lista-servicios-->
+      <article class="servicio revela" id="servicio-electricidad">
+        <div class="servicio__cabeza">
+          <h3 class="servicio__nombre">Electricidad</h3>
+          <p class="servicio__resumen">Enchufes, luces, cuadros y averías.</p>
+        </div>
+        <ul class="servicio__trabajos">
+          <li>Enchufes e interruptores</li><li>Lámparas y focos</li><li>Saltan los plomos</li><li>Cambio de cuadro eléctrico</li><li>Puntos de luz nuevos</li>
+        </ul>
+        <div class="servicio__precio">
+          <span class="servicio__desde">desde</span>
+          <span class="servicio__cifra">40&nbsp;€</span>
+        </div>
+        <button type="button" class="servicio__pedir" data-servicio="electricidad">
+          Pedir presupuesto de electricidad
+        </button>
+      </article>
+      <article class="servicio revela" id="servicio-fontaneria">
+        <div class="servicio__cabeza">
+          <h3 class="servicio__nombre">Fontanería</h3>
+          <p class="servicio__resumen">Fugas, atascos, grifos y cisternas.</p>
+        </div>
+        <ul class="servicio__trabajos">
+          <li>Fugas de agua</li><li>Grifos que gotean</li><li>Cisternas</li><li>Desatascos</li><li>Termos eléctricos</li>
+        </ul>
+        <div class="servicio__precio">
+          <span class="servicio__desde">desde</span>
+          <span class="servicio__cifra">45&nbsp;€</span>
+        </div>
+        <button type="button" class="servicio__pedir" data-servicio="fontaneria">
+          Pedir presupuesto de fontanería
+        </button>
+      </article>
+      <article class="servicio revela" id="servicio-climatizacion">
+        <div class="servicio__cabeza">
+          <h3 class="servicio__nombre">Climatización</h3>
+          <p class="servicio__resumen">Aire acondicionado y calefacción.</p>
+        </div>
+        <ul class="servicio__trabajos">
+          <li>Instalar aire acondicionado</li><li>Limpieza y mantenimiento</li><li>No enfría o no calienta</li><li>Radiadores y purgado</li>
+        </ul>
+        <div class="servicio__precio">
+          <span class="servicio__desde">desde</span>
+          <span class="servicio__cifra">60&nbsp;€</span>
+        </div>
+        <button type="button" class="servicio__pedir" data-servicio="climatizacion">
+          Pedir presupuesto de climatización
+        </button>
+      </article>
+      <article class="servicio revela" id="servicio-reparaciones">
+        <div class="servicio__cabeza">
+          <h3 class="servicio__nombre">Pequeños arreglos</h3>
+          <p class="servicio__resumen">Todo lo demás que se rompe en casa.</p>
+        </div>
+        <ul class="servicio__trabajos">
+          <li>Colgar cuadros y estanterías</li><li>Montar muebles</li><li>Puertas que no cierran</li><li>Persianas</li><li>Silicona de baño y cocina</li>
+        </ul>
+        <div class="servicio__precio">
+          <span class="servicio__desde">desde</span>
+          <span class="servicio__cifra">35&nbsp;€</span>
+        </div>
+        <button type="button" class="servicio__pedir" data-servicio="reparaciones">
+          Pedir presupuesto de pequeños arreglos
+        </button>
+      </article><!--/auto:lista-servicios--></div>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA (es una secuencia real, por eso va numerado) -->
+    <section class="pasos" id="como-funciona">
+      <div class="contenedor">
+        <h2 class="seccion__titulo">Cómo funciona</h2>
+        <ol class="pasos__lista">
+          <li class="paso revela">
+            <span class="paso__numero" aria-hidden="true">1</span>
+            <h3>Nos cuentas qué pasa</h3>
+            <p>Por WhatsApp o por teléfono. Si puedes, manda una foto: ayuda mucho a dar un precio justo.</p>
+          </li>
+          <li class="paso revela">
+            <span class="paso__numero" aria-hidden="true">2</span>
+            <h3>Te damos precio</h3>
+            <p>Precio cerrado de la reparación y un día y una hora para ir. Si no te encaja, no pasa nada.</p>
+          </li>
+          <li class="paso revela">
+            <span class="paso__numero" aria-hidden="true">3</span>
+            <h3>Vamos y lo dejamos listo</h3>
+            <p>Llegamos a la hora, lo arreglamos y recogemos. Pagas al terminar, en efectivo, tarjeta o Bizum.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CONFIANZA: qué incluye el precio, seguro, garantía, factura -->
+    <section class="confianza" id="confianza">
+      <div class="contenedor">
+        <h2 class="seccion__titulo">Contratar con nosotros</h2>
+        <p class="seccion__entradilla">Lo que puedes esperar cuando nos llamas, y lo que no.</p>
+        <ul class="confianza__lista" id="lista-confianza"><!--auto:lista-confianza-->
+      <li class="confia revela">
+        <h3>Precio cerrado antes de ir</h3>
+        <p>Te decimos el total antes de empezar. Si el problema resulta ser otro, decides tú.</p>
+        
+      </li>
+      <li class="confia revela">
+        <h3>Qué incluye el precio</h3>
+        <p>Mano de obra y pequeño material, sin sorpresas.</p>
+        <details class="confia__mas"><summary>Ver detalle</summary><p>Pequeño material significa tacos, tornillos, silicona y similares. Las piezas grandes van aparte y siempre con tu visto bueno. (Pendiente: confirmar si hay desplazamiento y recargo fuera de zona.)</p></details>
+      </li>
+      <li class="confia revela">
+        <h3>Seguro de responsabilidad civil</h3>
+        <p>Si algo se daña por error al trabajar, lo cubre el seguro. (Pendiente: confirmar que existe la póliza.)</p>
+        
+      </li>
+      <li class="confia revela">
+        <h3>Garantía en los trabajos</h3>
+        <p>Si lo que hemos arreglado falla, se vuelve a arreglar sin coste.</p>
+        <details class="confia__mas"><summary>Ver detalle</summary><p>La garantía cubre el trabajo realizado durante el plazo indicado en la factura. (Pendiente: indicar el plazo real y qué queda fuera, por ejemplo el mal uso o el desgaste normal.)</p></details>
+      </li>
+      <li class="confia revela">
+        <h3>Factura de todo</h3>
+        <p>Con IVA desglosado, para que puedas justificarla o reclamar. (Pendiente de confirmar.)</p>
+        
+      </li>
+      <li class="confia revela">
+        <h3>Personas con nombre y cara</h3>
+        <p>Sabes quién va a tu casa antes de que llegue. Y si algo no va bien, sabes a quién llamar.</p>
+        
+      </li><!--/auto:lista-confianza--></ul>
+        <ul class="confianza__sellos" id="lista-habilitaciones" hidden><!--auto:lista-habilitaciones--><!--/auto:lista-habilitaciones--></ul>
+        <p class="confianza__extra">
+          ¿Administras una comunidad de vecinos o una oficina? También hacemos mantenimiento
+          y presupuestos para comunidades y empresas.
+          <a href="#parte">Cuéntanos qué necesitas</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- TRABAJOS HECHOS (se rellena desde datos.js; si TRABAJOS está vacío, la sección se oculta) -->
+    <section class="trabajos" id="trabajos">
+      <div class="contenedor">
+        <h2 class="seccion__titulo">Trabajos hechos</h2>
+        <p class="seccion__entradilla">Algunos de los arreglos que hemos dejado listos.</p>
+        <div class="trabajos__rejilla" id="lista-trabajos"><!--auto:lista-trabajos-->
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Cuadro eléctrico renovado</strong>
+          <span>Electricidad</span>
+        </figcaption>
+      </figure>
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Fuga bajo el fregadero</strong>
+          <span>Fontanería</span>
+        </figcaption>
+      </figure>
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Split instalado en salón</strong>
+          <span>Climatización</span>
+        </figcaption>
+      </figure>
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Estantería a medida</strong>
+          <span>Pequeños arreglos</span>
+        </figcaption>
+      </figure>
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Cambio de grifo de baño</strong>
+          <span>Fontanería</span>
+        </figcaption>
+      </figure>
+      <figure class="trabajo revela">
+        <div class="trabajo__foto trabajo__foto--vacia">
+          <span>Foto pendiente</span>
+        </div>
+        <figcaption>
+          <strong>Focos empotrados en cocina</strong>
+          <span>Electricidad</span>
+        </figcaption>
+      </figure><!--/auto:lista-trabajos--></div>
+      </div>
+    </section>
+
+    <!-- QUIÉNES SOMOS -->
+    <section class="sobre" id="sobre">
+      <div class="contenedor sobre__rejilla">
+        <div class="sobre__foto" id="sobre-foto" aria-hidden="true"></div>
+        <div>
+          <h2 class="seccion__titulo" id="sobre-titulo"><!--auto:sobre-titulo-->Una persona, no un call center<!--/auto:sobre-titulo--></h2>
+          <div class="sobre__texto" id="sobre-texto"><!--auto:sobre-texto--><p>Texto de ejemplo: somos un pequeño negocio de reparaciones para el hogar. Cuando llamas, contesta la misma persona que luego va a tu casa.</p><p>Texto de ejemplo: llevamos años arreglando enchufes, fugas y aires acondicionados, y preferimos que te ahorres una visita si se puede resolver de otra forma.</p><!--/auto:sobre-texto--></div>
+          <dl class="sobre__datos" id="sobre-datos"><!--auto:sobre-datos--><div><dt>años de experiencia</dt><dd>10+</dd></div><div><dt>arreglos hechos</dt><dd>500+</dd></div><div><dt>para dar precio</dt><dd>24 h</dd></div><!--/auto:sobre-datos--></dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPINIONES -->
+    <section class="opiniones" id="opiniones">
+      <div class="contenedor">
+        <h2 class="seccion__titulo">Lo que dicen los clientes</h2>
+        <div class="opiniones__lista" id="lista-opiniones"><!--auto:lista-opiniones-->
+      <blockquote class="opinion revela">
+        <p class="opinion__estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+        <p class="opinion__texto">Texto de ejemplo: vinieron el mismo día, me dijeron el precio antes y lo dejaron todo limpio.</p>
+        <footer><strong>Nombre del cliente</strong> · Barrio</footer>
+      </blockquote>
+      <blockquote class="opinion revela">
+        <p class="opinion__estrellas" role="img" aria-label="5 de 5 estrellas">★★★★★</p>
+        <p class="opinion__texto">Texto de ejemplo: puntuales y sin sorpresas al pagar. Los volveré a llamar.</p>
+        <footer><strong>Nombre del cliente</strong> · Barrio</footer>
+      </blockquote>
+      <blockquote class="opinion revela">
+        <p class="opinion__estrellas" role="img" aria-label="4 de 5 estrellas">★★★★☆</p>
+        <p class="opinion__texto">Texto de ejemplo: arreglaron la avería que otros no encontraban.</p>
+        <footer><strong>Nombre del cliente</strong> · Barrio</footer>
+      </blockquote><!--/auto:lista-opiniones--></div>
+        <p class="opiniones__mas" id="opiniones-google" hidden>
+          <a href="#" target="_blank" rel="noopener">Ver todas las opiniones en Google</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES -->
+    <section class="preguntas" id="preguntas">
+      <div class="contenedor preguntas__rejilla">
+        <div>
+          <h2 class="seccion__titulo">Preguntas frecuentes</h2>
+          <p class="seccion__entradilla">¿No ves la tuya? Llámanos o escríbenos y te respondemos.</p>
+        </div>
+        <div class="preguntas__lista" id="lista-preguntas"><!--auto:lista-preguntas-->
+      <details class="pregunta">
+        <summary>¿Cuánto cuesta venir a casa?</summary>
+        <p>Los precios de la tarifa son de mano de obra. Te decimos el total cerrado antes de ir, así que no hay sorpresas. (Pendiente: confirmar si se cobra desplazamiento.)</p>
+      </details>
+      <details class="pregunta">
+        <summary>¿Dais factura?</summary>
+        <p>Sí. (Pendiente de confirmar con el negocio.)</p>
+      </details>
+      <details class="pregunta">
+        <summary>¿Hay garantía en los trabajos?</summary>
+        <p>Sí, todos los trabajos tienen garantía. (Pendiente: indicar el plazo real.)</p>
+      </details>
+      <details class="pregunta">
+        <summary>¿Cómo puedo pagar?</summary>
+        <p>Al terminar el trabajo, en efectivo, con tarjeta o por Bizum.</p>
+      </details>
+      <details class="pregunta">
+        <summary>¿Atendéis urgencias?</summary>
+        <p>Sí, llámanos y vamos el mismo día siempre que podamos. Las urgencias fuera de horario pueden tener recargo.</p>
+      </details>
+      <details class="pregunta">
+        <summary>¿Trabajáis con comunidades de vecinos o empresas?</summary>
+        <p>Sí. Cuéntanos qué necesitas y te preparamos un presupuesto. (Pendiente de confirmar.)</p>
+      </details><!--/auto:lista-preguntas--></div>
+      </div>
+    </section>
+
+    <!-- ZONA Y HORARIO -->
+    <section class="zona" id="zona">
+      <div class="contenedor zona__rejilla">
+        <div>
+          <h2 class="seccion__titulo">Dónde trabajamos</h2>
+          <p class="zona__texto" data-config="zona">Ciudad y alrededores, hasta 20 km. Si estás más lejos, pregunta.</p>
+        </div>
+        <div>
+          <h2 class="seccion__titulo">Cuándo</h2>
+          <dl class="horario" id="horario"><!--auto:horario--><div class="horario__fila"><dt>Lunes a viernes</dt><dd>8:00 – 20:00</dd></div><div class="horario__fila"><dt>Sábados</dt><dd>9:00 – 14:00</dd></div><div class="horario__fila"><dt>Urgencias</dt><dd>Todos los días, llamando</dd></div><!--/auto:horario--></dl>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <span class="marca__nombre marca__nombre--pie" data-config="nombre">tuerca</span>
+      <nav class="pie__legal" aria-label="Información legal">
+        <a href="aviso-legal.html">Aviso legal</a>
+        <a href="privacidad.html">Privacidad y cookies</a>
+      </nav>
+      <span>© <span id="anio">2026</span> · <span data-config="telefono">600 000 000</span></span>
+    </div>
+  </footer>
+
+  <!-- Primero los datos, luego la lógica -->
+  <script src="js/datos.js"></script>
+  <script src="js/plantillas.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

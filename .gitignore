@@ -1,0 +1,14 @@
+# Dependencias y sistema
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Registros y variables secretas (por si más adelante hay backend)
+*.log
+.env
+.env.*
+
+# Editores
+.idea/
+*.swp

@@ -1,0 +1,14 @@
+{
+  "name": "tuerca-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Web de un servicio de manitas a domicilio: electricidad, fontanería y climatización.",
+  "type": "module",
+  "scripts": {
+    "construir": "node construir.mjs",
+    "servir": "npx --yes serve ."
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviso legal · Tuerca</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="legal-pagina">
+
+  <!--
+    BORRADOR. Los datos del titular se rellenan en js/datos.js (bloque EMPRESA).
+    Antes de publicar, que lo revise el gestor o asesor de tu tío: es texto general,
+    no un asesoramiento legal a medida.
+  -->
+
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a href="index.html" class="marca" aria-label="Tuerca, volver al inicio">
+        <svg class="marca__icono" viewBox="0 0 40 40" aria-hidden="true">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" />
+          <circle cx="20" cy="20" r="7" />
+        </svg>
+        <span class="marca__nombre" data-config="nombre">tuerca</span>
+      </a>
+      <a class="boton boton--telefono" href="index.html" style="margin-left:auto">← Volver a la web</a>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="contenedor">
+      <h1>Aviso legal</h1>
+      <p>Información del titular de este sitio web, según la Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE).</p>
+
+      <h2>1. Titular</h2>
+      <ul>
+        <li><strong>Titular:</strong> <span data-empresa="titular"></span></li>
+        <li><strong>NIF/CIF:</strong> <span data-empresa="nif"></span></li>
+        <li><strong>Domicilio:</strong> <span data-empresa="domicilio"></span></li>
+        <li><strong>Correo electrónico:</strong> <span data-empresa="email"></span></li>
+        <li><strong>Teléfono:</strong> <span data-config="telefono"></span></li>
+        <li><strong>Actividad:</strong> <span data-empresa="actividad"></span></li>
+        <li data-empresa-opcional="registro"><strong>Datos registrales:</strong> <span data-empresa="registro"></span></li>
+      </ul>
+
+      <h2>2. Objeto y condiciones de uso</h2>
+      <p>Este sitio web informa de los servicios del titular y permite solicitar un presupuesto. Navegar por él implica aceptar estas condiciones. Quien use la web se compromete a hacerlo de forma lícita y a no dañar su funcionamiento.</p>
+
+      <h2>3. Precios e información de los servicios</h2>
+      <p>Los precios que aparecen son orientativos. El precio final de cada trabajo se comunica al cliente antes de empezar y solo se aplica si este lo acepta. La información de la web puede cambiar sin previo aviso.</p>
+
+      <h2>4. Propiedad intelectual</h2>
+      <p>Los textos, el diseño y el logotipo de esta web pertenecen al titular, salvo que se indique otra cosa. Las fotografías pueden pertenecer a terceros con licencia de uso. No se permite su copia o reutilización sin permiso.</p>
+
+      <h2>5. Responsabilidad</h2>
+      <p>El titular procura que la información sea correcta y esté actualizada, pero no garantiza que la web funcione sin interrupciones ni errores. No se hace responsable del contenido de páginas externas a las que se pueda enlazar.</p>
+
+      <h2>6. Protección de datos y cookies</h2>
+      <p>Consulta la <a href="privacidad.html">política de privacidad y cookies</a>.</p>
+
+      <h2>7. Legislación aplicable</h2>
+      <p>Este aviso se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la ley, respetando siempre los derechos del consumidor.</p>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <span class="marca__nombre marca__nombre--pie" data-config="nombre">tuerca</span>
+      <nav class="pie__legal" aria-label="Información legal">
+        <a href="aviso-legal.html">Aviso legal</a>
+        <a href="privacidad.html">Privacidad y cookies</a>
+      </nav>
+      <span>© <span id="anio">2026</span></span>
+    </div>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/legal.js"></script>
+</body>
+</html>

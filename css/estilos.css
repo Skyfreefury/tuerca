@@ -1,0 +1,1569 @@
+/*
+  ESTILOS · tuerca
+  ----------------
+  Idea visual: la hoja de trabajo del manitas. Papel azulado de taller, tinta azul marino,
+  bolígrafo azul para lo que rellena el cliente y amarillo de alta visibilidad
+  solo para el "parte de trabajo", que es lo más importante de la página.
+
+  Tipografía: una sola familia (Archivo) jugando con su eje de anchura:
+  muy estrecha y gorda para titulares, normal para el texto.
+*/
+
+/* ---------- Tipografía Archivo, alojada en la propia web ---------- */
+/* Es una fuente variable (peso 400-900 y anchura 62-125 %). Va en local, no desde Google,
+   para no enviar la IP de cada visitante a terceros y para que cargue antes. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url("fuentes/archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url("fuentes/archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- Variables (cambia aquí la paleta entera) ---------- */
+:root {
+  --papel: #eef2f5;        /* fondo general, gris azulado frío */
+  --blanco: #fbfcfd;       /* superficies elevadas */
+  --tinta: #182638;        /* texto y fondos oscuros */
+  --tinta-suave: #4a5a6e;  /* texto secundario */
+  --boli: #2554b8;         /* azul bolígrafo: enlaces, lo que escribe el cliente */
+  --amarillo: #f6c945;     /* alta visibilidad: solo el parte y el botón principal */
+  --amarillo-claro: #fdf3cf;
+  --linea: #c6d0da;
+  --error: #b3261e;
+
+  --ancho: 72rem;
+  --radio: 6px;
+
+  --fuente: "Archivo", system-ui, sans-serif;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* para que la cabecera fija no tape los títulos */
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul, ol, dl, dd, fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  color: var(--boli);
+}
+
+:focus-visible {
+  outline: 3px solid var(--boli);
+  outline-offset: 3px;
+}
+
+.contenedor {
+  width: min(100% - 2rem, var(--ancho));
+  margin-inline: auto;
+}
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: var(--radio);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.boton svg {
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+}
+
+/* ---------- Cabecera ---------- */
+/* Transparente encima de la foto; main.js le añade .cabecera--solida al bajar */
+.cabecera {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 10;
+  color: var(--blanco);
+  background: transparent;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cabecera--solida {
+  background: var(--tinta);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.cabecera__fila {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  min-height: 5rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.marca__icono {
+  width: 3rem;
+  height: 3rem;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.marca__icono polygon {
+  fill: var(--amarillo);
+}
+
+.marca__icono circle {
+  fill: var(--tinta);
+}
+
+.marca__nombre {
+  font-size: 2.1rem;
+  font-weight: 900;
+  font-stretch: 62%;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.menu {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: auto;
+}
+
+.menu a {
+  color: #c9d4e2;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.menu a:hover {
+  color: var(--blanco);
+}
+
+.boton--telefono {
+  padding: 0.5rem 0.9rem;
+  background: var(--blanco);
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Portada con foto de fondo ---------- */
+.portada {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100vh;
+  min-height: 100svh; /* en móvil descuenta la barra del navegador */
+  padding-top: 7rem;
+  padding-bottom: 9rem; /* hueco para que el parte se monte encima */
+  color: var(--blanco);
+  background: var(--tinta); /* se ve si la foto no carga */
+}
+
+/*
+  LA FOTO
+  Son img/portada.webp (escritorio) e img/portada-900.webp (móvil), hechas a partir de img/portada.jpg
+  (foto gratuita de Unsplash, de uso libre). El .jpg se usa para las vistas previas al compartir el enlace.
+  Lo ideal: sustituirla por una foto real de tu tío trabajando, manteniendo los tres nombres.
+
+  Encima de la foto van dos degradados de color tinta para que el texto se lea
+  siempre, sea cual sea la foto.
+*/
+.portada__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, var(--tinta) 0%, rgba(24, 38, 56, 0.55) 45%, rgba(24, 38, 56, 0.25) 100%),
+    linear-gradient(to right, rgba(24, 38, 56, 0.85) 0%, rgba(24, 38, 56, 0.2) 70%),
+    var(--foto-portada) center 30% / cover no-repeat;
+  --foto-portada: url("../img/portada.webp");
+}
+
+/* En móvil se carga una versión de 900 px de ancho (34 KB en vez de 109 KB) */
+@media (max-width: 640px) {
+  .portada__fondo {
+    --foto-portada: url("../img/portada-900.webp");
+  }
+}
+
+.portada__contenido {
+  padding-bottom: 2.5rem;
+}
+
+/* El <h1> lleva dentro la línea de servicios (con la ciudad) y el titular grande:
+   así el título principal de la página dice de qué va el negocio, que es lo que mira Google */
+.portada__h1 {
+  font: inherit;
+  margin: 0;
+}
+
+.portada__servicios {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--amarillo);
+  margin-bottom: 0.75rem;
+}
+
+.portada__titulo {
+  display: block;
+  font-size: clamp(4rem, 13vw, 11rem);
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+}
+
+.portada__entradilla {
+  max-width: 34ch;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  color: #dce4ee;
+  margin-bottom: 2rem;
+}
+
+.portada__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.boton--principal {
+  padding: 1rem 1.6rem;
+  background: var(--amarillo);
+  color: var(--tinta);
+  font-size: 1.1rem;
+}
+
+.boton--principal:hover {
+  background: #ffd865;
+}
+
+.boton--claro {
+  padding: 1rem 1.4rem;
+  color: var(--blanco);
+  font-size: 1.1rem;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.boton--claro:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Las garantías, en una fila al pie de la foto */
+.portada__garantias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.portada__garantias li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Marca de verificación dibujada con CSS, como un tick a boli */
+.portada__garantias li::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.95rem;
+  margin: -0.25rem 0.25rem 0 0.2rem;
+  border: solid var(--amarillo);
+  border-width: 0 3px 3px 0;
+  transform: rotate(40deg);
+}
+
+/* ---------- Solicitud: texto + parte, montados sobre el final de la foto ---------- */
+.solicitud {
+  position: relative;
+  padding-bottom: clamp(3.5rem, 8vw, 6rem);
+}
+
+.solicitud__rejilla {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 32rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.solicitud__texto {
+  padding-top: 3rem;
+}
+
+/* Bloque de ayuda bajo "Explícanos tu problema" */
+.ayuda {
+  display: grid;
+  gap: 1.75rem;
+  max-width: 34rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--tinta);
+}
+
+.ayuda__titulo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: -0.75rem;
+}
+
+.ayuda__lista {
+  display: grid;
+  gap: 0.6rem;
+}
+
+/* Las viñetas son casillas como las del parte, para que se entienda que "se rellenan" */
+.ayuda__lista li {
+  position: relative;
+  padding-left: 1.9rem;
+}
+
+.ayuda__lista li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 1rem;
+  height: 1rem;
+  border: 1.5px solid var(--tinta);
+  border-radius: 2px;
+  background: var(--blanco);
+}
+
+.ayuda__lista li::after {
+  content: "";
+  position: absolute;
+  left: 0.32rem;
+  top: 0.32em;
+  width: 0.3rem;
+  height: 0.6rem;
+  border: solid var(--boli);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(40deg);
+}
+
+.ayuda__despues {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem 1.15rem;
+  background: var(--blanco);
+  border-left: 4px solid var(--amarillo);
+  border-radius: 0 var(--radio) var(--radio) 0;
+}
+
+.ayuda__etiqueta {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+.ayuda__contacto > p {
+  margin-bottom: 0.6rem;
+  font-weight: 700;
+}
+
+.ayuda__botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.boton--contacto {
+  padding: 0.75rem 1.1rem;
+  background: var(--blanco);
+  color: var(--tinta);
+  box-shadow: inset 0 0 0 1.5px var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+
+.boton--contacto:hover {
+  background: var(--tinta);
+  color: var(--blanco);
+}
+
+.solicitud .parte {
+  margin-top: -6rem; /* sube el parte sobre la foto */
+}
+
+/* ---------- El parte de trabajo (la pieza protagonista) ---------- */
+.parte {
+  position: relative;
+  background: var(--amarillo-claro);
+  border-radius: 2px 2px var(--radio) var(--radio);
+  padding: 2.25rem clamp(1.25rem, 3vw, 2rem) 1.75rem;
+  box-shadow:
+    0 1px 0 var(--linea),
+    0 18px 40px -22px rgba(24, 38, 56, 0.45);
+  transform: rotate(0.6deg);
+}
+
+/* Borde superior troquelado, como una hoja arrancada de un talonario */
+.parte::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 0.85rem;
+  background:
+    radial-gradient(circle at 0.5rem 0, var(--papel) 0.3rem, transparent 0.32rem) 0 0 / 1rem 100% repeat-x,
+    var(--amarillo);
+}
+
+.parte__cabeza {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--tinta);
+}
+
+.parte__titulo {
+  font-size: 1.9rem;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+}
+
+.parte__numero {
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.parte__campo {
+  border: 0;
+  margin-bottom: 1.25rem;
+}
+
+.parte__campo legend,
+.parte__campo > label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+}
+
+/* Campos de texto: línea para rellenar, escritos en azul bolígrafo */
+.parte input[type="text"],
+.parte textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 1.5px solid var(--tinta-suave);
+  border-radius: 0;
+  background: transparent;
+  color: var(--boli);
+  font: inherit;
+  font-size: 1.05rem;
+  padding: 0.35rem 0;
+}
+
+/* La descripción tiene renglones, como el papel del parte */
+.parte textarea {
+  resize: vertical;
+  line-height: 2rem;
+  padding: 0;
+  border-bottom: 0;
+  background-image: linear-gradient(transparent calc(2rem - 1.5px), var(--linea) calc(2rem - 1.5px));
+  background-size: 100% 2rem;
+  min-height: 6rem;
+}
+
+.parte input::placeholder,
+.parte textarea::placeholder {
+  color: #8f98a3;
+}
+
+.parte input[type="text"]:focus,
+.parte textarea:focus {
+  outline: none;
+  border-color: var(--boli);
+  box-shadow: 0 2px 0 var(--boli);
+}
+
+.parte__dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Opciones tipo "casilla de impreso" */
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.opcion {
+  position: relative;
+  cursor: pointer;
+}
+
+.opcion input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.opcion span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.55rem;
+  border: 1.5px solid var(--tinta);
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--blanco);
+}
+
+/* La casilla vacía */
+.opcion span::before {
+  content: "";
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1.5px solid var(--tinta);
+  border-radius: 2px;
+  background: var(--blanco);
+}
+
+/* Marcada: una X de bolígrafo */
+.opcion input:checked + span {
+  border-color: var(--boli);
+  color: var(--boli);
+}
+
+.opcion input:checked + span::before {
+  border-color: var(--boli);
+  background:
+    linear-gradient(45deg, transparent 42%, var(--boli) 42% 58%, transparent 58%),
+    linear-gradient(-45deg, transparent 42%, var(--boli) 42% 58%, transparent 58%),
+    var(--blanco);
+}
+
+.opcion input:focus-visible + span {
+  outline: 3px solid var(--boli);
+  outline-offset: 2px;
+}
+
+.parte__error {
+  margin: -0.25rem 0 1rem;
+  color: var(--error);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.boton--enviar {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: var(--tinta);
+  color: var(--amarillo);
+  font-size: 1.15rem;
+}
+
+.boton--enviar:hover {
+  background: #0e1826;
+}
+
+.parte__pie {
+  margin-top: 0.85rem;
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+.parte__legal {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Encabezados de sección ---------- */
+.seccion__titulo {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.seccion__entradilla {
+  max-width: 55ch;
+  color: var(--tinta-suave);
+  margin-bottom: 2.5rem;
+}
+
+/* ---------- Servicios: una tarifa, no un mosaico de tarjetas ---------- */
+.servicios {
+  background: var(--blanco);
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  border-top: 1px solid var(--linea);
+}
+
+.servicios__lista {
+  border-top: 2px solid var(--tinta);
+}
+
+.servicio {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) 1fr auto;
+  grid-template-areas:
+    "cabeza trabajos precio"
+    "cabeza trabajos pedir";
+  column-gap: clamp(1.5rem, 4vw, 3.5rem);
+  row-gap: 0.75rem;
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+.servicio__cabeza   { grid-area: cabeza; }
+.servicio__trabajos { grid-area: trabajos; }
+.servicio__precio   { grid-area: precio; }
+.servicio__pedir    { grid-area: pedir; }
+
+.servicio__nombre {
+  font-size: 1.9rem;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.servicio__resumen {
+  color: var(--tinta-suave);
+  font-size: 0.95rem;
+}
+
+.servicio__trabajos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  align-content: start;
+  padding-top: 0.3rem;
+}
+
+.servicio__trabajos li {
+  position: relative;
+  padding-left: 0.85rem;
+}
+
+.servicio__trabajos li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: var(--linea);
+  border-radius: 50%;
+}
+
+.servicio__precio {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.servicio__desde {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.servicio__cifra {
+  font-size: 2.4rem;
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.servicio__pedir {
+  justify-self: end;
+  align-self: end;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--boli);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  text-align: right;
+}
+
+.servicio__pedir:hover {
+  color: var(--tinta);
+}
+
+/* ---------- Cómo funciona ---------- */
+.pasos {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  overflow-x: clip; /* la animación de los números no debe crear scroll horizontal */
+}
+
+.pasos__lista {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-top: 1.5rem;
+  counter-reset: none;
+}
+
+.paso {
+  position: relative;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--tinta);
+}
+
+.paso__numero {
+  display: block;
+  width: max-content; /* que el sello agrandado no ensanche la columna entera */
+  font-size: 4.5rem;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.9;
+  color: var(--boli);
+  margin-bottom: 0.75rem;
+}
+
+.paso h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.paso p {
+  color: var(--tinta-suave);
+  max-width: 34ch;
+}
+
+/* ---------- Cabecera: hamburguesa y WhatsApp flotante ---------- */
+.hamburguesa {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.6rem;
+  border: 0;
+  border-radius: var(--radio);
+  background: transparent;
+  cursor: pointer;
+}
+
+.hamburguesa span {
+  display: block;
+  height: 2.5px;
+  background: var(--blanco);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.cabecera--menu .hamburguesa span:nth-child(1) { transform: translateY(0.6rem) rotate(45deg); }
+.cabecera--menu .hamburguesa span:nth-child(2) { opacity: 0; }
+.cabecera--menu .hamburguesa span:nth-child(3) { transform: translateY(-0.6rem) rotate(-45deg); }
+
+.whatsapp-flotante {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 999px;
+  background: #1faa59;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.whatsapp-flotante--oculto {
+  opacity: 0;
+  transform: translateY(1rem);
+  pointer-events: none;
+}
+
+.whatsapp-flotante:hover {
+  transform: translateY(-2px);
+}
+
+.whatsapp-flotante svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
+
+/* ---------- Animación de aparición ---------- */
+/* Solo se oculta si hay JS (la clase .js la pone el <head>), así sin JS todo se ve */
+.js .revela {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition:
+    opacity 0.6s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+
+.js .revela.revela--visto {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cómo funciona: la línea de cada paso se dibuja y el número cae como un sello */
+.js .paso {
+  border-top-color: transparent;
+}
+
+.paso::before {
+  content: "";
+  position: absolute;
+  inset: -2px 0 auto 0;
+  height: 2px;
+  background: var(--tinta);
+  transform-origin: left;
+}
+
+.js .paso::before {
+  transform: scaleX(0);
+  transition: transform 0.8s ease;
+  transition-delay: calc(var(--i, 0) * 120ms + 0.25s);
+}
+
+.js .paso.revela--visto::before {
+  transform: scaleX(1);
+}
+
+.js .paso .paso__numero {
+  transform: scale(1.6) rotate(-8deg);
+  opacity: 0;
+  transform-origin: left bottom;
+  transition:
+    transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1),
+    opacity 0.3s ease;
+  transition-delay: calc(var(--i, 0) * 120ms + 0.35s);
+}
+
+.js .paso.revela--visto .paso__numero {
+  transform: none;
+  opacity: 1;
+}
+
+/* ---------- Confianza ---------- */
+.confianza {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  background: var(--tinta);
+  color: var(--blanco);
+}
+
+.confianza .seccion__titulo {
+  color: var(--amarillo);
+}
+
+.confianza .seccion__entradilla {
+  color: #aebbcb;
+}
+
+.confianza__lista {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem clamp(1.5rem, 4vw, 3rem);
+}
+
+.confia {
+  padding-top: 1rem;
+  border-top: 2px solid var(--amarillo);
+}
+
+.confia h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.confia p {
+  color: #c9d4e2;
+  font-size: 0.97rem;
+}
+
+/* "Ver detalle": desplegable pequeño dentro de la tarjeta */
+.confia__mas {
+  margin-top: 0.6rem;
+}
+
+.confia__mas summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--amarillo);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.confia__mas summary::-webkit-details-marker {
+  display: none;
+}
+
+.confia__mas summary::after {
+  content: "+";
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.confia__mas[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.confia__mas.pregunta--cerrando summary::after {
+  transform: none;
+}
+
+.confia__mas p {
+  margin-top: 0.5rem;
+  padding-bottom: 0.25rem;
+  font-size: 0.92rem;
+  color: #aebbcb;
+}
+
+.confianza__sellos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.confianza__sellos li {
+  padding: 0.4rem 0.85rem;
+  border: 1.5px solid var(--amarillo);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--amarillo);
+}
+
+.confianza__extra {
+  max-width: 60ch;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #34465e;
+  color: #c9d4e2;
+}
+
+.confianza__extra a {
+  color: var(--amarillo);
+}
+
+/* ---------- Trabajos hechos ---------- */
+.trabajos {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  background: var(--blanco);
+  border-top: 1px solid var(--linea);
+}
+
+.trabajos__rejilla {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.trabajo {
+  margin: 0;
+}
+
+.trabajo__foto {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radio);
+  background: var(--papel);
+}
+
+.trabajo__foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.trabajo:hover .trabajo__foto img {
+  transform: scale(1.04);
+}
+
+/* Hueco mientras no hay foto real: cuadrícula de plano técnico */
+.trabajo__foto--vacia {
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed var(--linea);
+  background:
+    linear-gradient(var(--linea) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    linear-gradient(90deg, var(--linea) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    var(--papel);
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.trabajo__foto--vacia span {
+  padding: 0.25rem 0.6rem;
+  background: var(--blanco);
+  border-radius: 3px;
+}
+
+.trabajo figcaption {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.6rem;
+}
+
+.trabajo figcaption span {
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Quiénes somos ---------- */
+.sobre {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.sobre__rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 26rem) 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.sobre__foto {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radio);
+  background: var(--papel) center / cover no-repeat;
+}
+
+.sobre__foto--vacia {
+  border: 1.5px dashed var(--linea);
+  background:
+    linear-gradient(var(--linea) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    linear-gradient(90deg, var(--linea) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    var(--papel);
+}
+
+.sobre__texto {
+  display: grid;
+  gap: 1rem;
+  max-width: 52ch;
+  color: var(--tinta-suave);
+}
+
+.sobre__datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--tinta);
+}
+
+.sobre__datos > div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.sobre__datos dd {
+  font-size: 2.6rem;
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 1;
+  color: var(--boli);
+}
+
+.sobre__datos dt {
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Opiniones ---------- */
+.opiniones {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  background: var(--amarillo-claro);
+}
+
+.opiniones__lista {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.opinion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1.5rem;
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: 0 12px 30px -20px rgba(24, 38, 56, 0.5);
+}
+
+.opinion__estrellas {
+  color: #c98f00;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.opinion__texto {
+  flex: 1;
+}
+
+.opinion footer {
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+.opinion footer strong {
+  color: var(--tinta);
+}
+
+.opiniones__mas {
+  margin-top: 1.75rem;
+  font-weight: 700;
+}
+
+/* ---------- Páginas legales ---------- */
+.legal {
+  padding-block: 8rem 4rem;
+}
+
+.legal .contenedor {
+  max-width: 46rem;
+}
+
+.legal h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.95;
+  margin-bottom: 0.5rem;
+}
+
+.legal h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 2.25rem 0 0.5rem;
+}
+
+.legal p,
+.legal li {
+  color: var(--tinta-suave);
+  margin-bottom: 0.75rem;
+}
+
+.legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.legal__aviso {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 4px solid var(--amarillo);
+  background: var(--amarillo-claro);
+  color: var(--tinta);
+}
+
+/* En las páginas legales la cabecera siempre es sólida (no hay foto detrás) */
+.legal-pagina .cabecera {
+  background: var(--tinta);
+}
+
+/* ---------- Preguntas frecuentes ---------- */
+.preguntas {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.preguntas__rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.preguntas__lista {
+  border-top: 2px solid var(--tinta);
+}
+
+.pregunta {
+  border-bottom: 1px solid var(--linea);
+}
+
+.pregunta summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pregunta summary::-webkit-details-marker {
+  display: none;
+}
+
+/* El + gira y se convierte en × al abrir */
+.pregunta summary::after {
+  content: "+";
+  flex: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--boli);
+  transition: transform 0.2s ease;
+}
+
+.pregunta[open] summary::after {
+  transform: rotate(45deg);
+}
+
+/* Mientras se recoge, el <details> sigue "open" hasta que acaba la animación;
+   esta clase devuelve el "+" a su sitio desde el primer instante */
+.pregunta--cerrando summary::after {
+  transform: none;
+}
+
+.pregunta p {
+  padding-bottom: 1.25rem;
+  max-width: 60ch;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Zona y horario ---------- */
+.zona {
+  background: var(--tinta);
+  color: var(--blanco);
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+
+.zona__rejilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.zona .seccion__titulo {
+  color: var(--amarillo);
+}
+
+.zona__texto {
+  font-size: 1.25rem;
+  max-width: 28ch;
+  color: #dbe3ed;
+}
+
+.horario {
+  display: grid;
+}
+
+.horario__fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.7rem;
+  border-bottom: 1px solid #34465e;
+}
+
+.horario__fila:first-child {
+  padding-top: 0.2rem;
+}
+
+.horario dt {
+  color: #aebbcb;
+}
+
+.horario dd {
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Pie ---------- */
+.pie {
+  background: var(--tinta);
+  color: #8d9bb0;
+  border-top: 1px solid #34465e;
+  font-size: 0.9rem;
+}
+
+.pie__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.5rem;
+}
+
+.pie__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.pie__legal a {
+  color: inherit;
+}
+
+.marca__nombre--pie {
+  color: var(--blanco);
+  font-size: 1.4rem;
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 60rem) {
+  .hamburguesa {
+    display: flex;
+  }
+
+  .boton--telefono {
+    margin-left: auto;
+  }
+
+  /* El menú pasa a ser un panel que cae bajo la cabecera */
+  .menu {
+    position: absolute;
+    inset: 100% 0 auto 0;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0.5rem 1rem 1rem;
+    max-height: calc(100vh - 5rem);
+    max-height: calc(100dvh - 5rem); /* si la pantalla es baja (móvil apaisado), el menú hace scroll */
+    overflow-y: auto;
+    background: var(--tinta);
+    border-top: 1px solid #34465e;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  .cabecera--menu {
+    background: var(--tinta);
+  }
+
+  .cabecera--menu .menu {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .menu a {
+    padding: 0.9rem 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #34465e;
+  }
+
+  .sobre__rejilla,
+  .preguntas__rejilla {
+    grid-template-columns: 1fr;
+  }
+
+  .sobre__foto {
+    aspect-ratio: 16 / 10;
+  }
+
+  .trabajos__rejilla,
+  .opiniones__lista,
+  .confianza__lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .solicitud__rejilla {
+    grid-template-columns: 1fr;
+  }
+
+  /* En pantallas estrechas el parte va primero, subido sobre la foto,
+     y el texto explicativo debajo */
+  .solicitud .parte {
+    order: -1;
+    max-width: 34rem;
+    transform: none;
+    margin-top: -5rem;
+  }
+
+  .solicitud__texto {
+    padding-top: 0;
+  }
+
+  .servicio {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "cabeza   precio"
+      "trabajos trabajos"
+      "pedir    pedir";
+  }
+
+  .servicio__pedir {
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 40rem) {
+  .marca__icono {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+
+  .marca__nombre {
+    font-size: 1.8rem;
+  }
+
+  .cabecera__fila {
+    gap: 1rem;
+  }
+
+  /* En móvil el teléfono solo enseña el icono, para que quepan marca y menú */
+  .boton--telefono span {
+    display: none;
+  }
+
+  .boton--telefono {
+    padding: 0.65rem;
+  }
+
+  .boton--telefono svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .whatsapp-flotante span {
+    display: none;
+  }
+
+  .parte__dos,
+  .pasos__lista,
+  .zona__rejilla,
+  .opiniones__lista,
+  .confianza__lista {
+    grid-template-columns: 1fr;
+  }
+
+  /* Galería en dos columnas: seis fotos apiladas eran una pantalla y media de scroll */
+  .trabajos__rejilla {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.75rem;
+  }
+
+  .trabajo__foto {
+    aspect-ratio: 1;
+  }
+
+  .trabajo figcaption strong {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  /* Las tres cifras de "Quiénes somos" caben en una fila */
+  .sobre__datos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .sobre__datos dd {
+    font-size: 1.9rem;
+  }
+
+  .servicio__cifra {
+    font-size: 1.9rem;
+  }
+
+  .pie__fila {
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 1.25rem;
+  }
+}
+
+/* ---------- Accesibilidad: sin animaciones si el usuario lo pide ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .revela,
+  .js .paso::before,
+  .js .paso .paso__numero {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

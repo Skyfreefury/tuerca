@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacidad y cookies · Tuerca</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="legal-pagina">
+
+  <!--
+    BORRADOR. Los datos del responsable se rellenan en js/datos.js (bloque EMPRESA).
+    Está escrito para la web tal y como es hoy: sin cookies, sin base de datos y con el
+    formulario enviando el mensaje por WhatsApp. Si eso cambia (analítica, mapas, formulario
+    que guarda datos en un servidor, reservas de cita...), hay que actualizar este texto.
+    Que lo revise el gestor o asesor de tu tío antes de publicar.
+  -->
+
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a href="index.html" class="marca" aria-label="Tuerca, volver al inicio">
+        <svg class="marca__icono" viewBox="0 0 40 40" aria-hidden="true">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" />
+          <circle cx="20" cy="20" r="7" />
+        </svg>
+        <span class="marca__nombre" data-config="nombre">tuerca</span>
+      </a>
+      <a class="boton boton--telefono" href="index.html" style="margin-left:auto">← Volver a la web</a>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="contenedor">
+      <h1>Privacidad y cookies</h1>
+      <p>Cómo tratamos tus datos personales, conforme al Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD).</p>
+
+      <h2>1. Responsable del tratamiento</h2>
+      <ul>
+        <li><strong>Responsable:</strong> <span data-empresa="titular"></span></li>
+        <li><strong>NIF/CIF:</strong> <span data-empresa="nif"></span></li>
+        <li><strong>Domicilio:</strong> <span data-empresa="domicilio"></span></li>
+        <li><strong>Correo electrónico:</strong> <span data-empresa="email"></span></li>
+        <li><strong>Teléfono:</strong> <span data-config="telefono"></span></li>
+      </ul>
+
+      <h2>2. Qué datos tratamos y para qué</h2>
+      <p>Al usar el formulario "Parte de trabajo" nos indicas el tipo de servicio, la urgencia, una descripción del problema y, si quieres, tu nombre y tu barrio o pueblo. Cuando envías el mensaje por WhatsApp, también recibimos tu número de teléfono. Si nos llamas o escribes, tratamos los datos que nos facilites en esa conversación.</p>
+      <p>Usamos estos datos solo para responder a tu consulta, darte un presupuesto y, si lo aceptas, organizar y realizar el trabajo, incluida la facturación.</p>
+
+      <h2>3. Base legal</h2>
+      <ul>
+        <li>Tu consentimiento al enviarnos voluntariamente el mensaje, para atender tu consulta.</li>
+        <li>La aplicación de medidas precontractuales que tú solicitas (el presupuesto) y la ejecución del contrato si lo aceptas.</li>
+        <li>El cumplimiento de obligaciones legales, como las fiscales y de facturación.</li>
+      </ul>
+
+      <h2>4. Cómo funciona el envío por WhatsApp</h2>
+      <p>Esta web no guarda lo que escribes en el formulario. Al pulsar el botón se abre tu aplicación de WhatsApp con el mensaje ya redactado, y solo se envía si tú lo confirmas allí. Desde ese momento, el mensaje viaja por WhatsApp (Meta Platforms) y queda sujeto a su política de privacidad.</p>
+
+      <h2>5. Con quién compartimos los datos</h2>
+      <p>No vendemos ni cedemos tus datos. Solo se comunican a terceros cuando es necesario para prestar el servicio o por obligación legal (por ejemplo, la gestoría o las administraciones públicas, en materia fiscal). Los proveedores que nos prestan servicios, como el alojamiento de la web o la mensajería, actúan por cuenta nuestra.</p>
+
+      <h2>6. Cuánto tiempo los conservamos</h2>
+      <p>Mientras sea necesario para atender tu consulta y, después, durante los plazos que exija la ley (por ejemplo, los de conservación de facturas). Pasado ese tiempo, se eliminan o se anonimizan.</p>
+
+      <h2>7. Tus derechos</h2>
+      <p>Puedes acceder a tus datos, rectificarlos, suprimirlos, oponerte a su tratamiento, limitarlo y pedir su portabilidad, escribiendo a <span data-empresa="email"></span>. Si crees que no hemos tratado tus datos correctamente, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>
+
+      <h2>8. Cookies</h2>
+      <p>Esta web <strong>no utiliza cookies</strong> propias ni de terceros, ni herramientas de analítica o publicidad. Las tipografías se sirven desde la propia web, sin conectarse a servidores externos. Por eso no mostramos un aviso de cookies.</p>
+      <p>Si en el futuro añadimos herramientas que usen cookies no necesarias, te lo diremos aquí y te pediremos tu consentimiento antes de activarlas.</p>
+
+      <h2>9. Cambios en esta política</h2>
+      <p>Podemos actualizar este texto cuando cambie la web o la normativa. La versión vigente es siempre la publicada en esta página.</p>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <span class="marca__nombre marca__nombre--pie" data-config="nombre">tuerca</span>
+      <nav class="pie__legal" aria-label="Información legal">
+        <a href="aviso-legal.html">Aviso legal</a>
+        <a href="privacidad.html">Privacidad y cookies</a>
+      </nav>
+      <span>© <span id="anio">2026</span></span>
+    </div>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/legal.js"></script>
+</body>
+</html>
