@@ -223,16 +223,23 @@ function prepararCabecera() {
   actualizar();
 }
 
-/* ---------- 7b. La tuerca del logo gira con el scroll ---------- */
-// Un cuarto de grado por píxel: una vuelta entera cada 1440 px. Solo se toca una variable CSS
-// y una vez por fotograma (requestAnimationFrame), así el scroll no se resiente.
+/* ---------- 7b. Las tuercas giran con el scroll ---------- */
+// La del logo: un cuarto de grado por píxel (una vuelta cada 1440 px).
+// La grande de la portada: gira en sentido contrario, como si se aflojara, y baja a un tercio
+// de la velocidad de la página (parallax). Solo se tocan variables CSS, una vez por fotograma.
 function prepararTuerca() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const icono = $(".marca__icono");
-  if (!icono) return;
+  const grande = $(".portada__tuerca");
   let pendiente = false;
   const girar = () => {
-    icono.style.setProperty("--giro", `${(window.scrollY * 0.25) % 360}deg`);
+    const y = window.scrollY;
+    if (icono) icono.style.setProperty("--giro", `${(y * 0.25) % 360}deg`);
+    // Pasada la portada ya no se ve: no hace falta moverla
+    if (grande && y < window.innerHeight * 1.5) {
+      grande.style.setProperty("--giro", `${y * -0.2}deg`);
+      grande.style.setProperty("--baja", `${y * 0.35}px`);
+    }
     pendiente = false;
   };
   window.addEventListener(

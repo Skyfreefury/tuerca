@@ -960,6 +960,97 @@ a {
   animation: tick 0.45s var(--ease-sello) calc(var(--d) + 250ms) backwards;
 }
 
+/*
+  La tuerca grande de la portada. Dos capas para que no se pisen:
+  .portada__tuerca  → la mueve el scroll (gira y baja más despacio que la página; main.js pone --giro y --baja)
+  .tuerca-grande    → la entrada al cargar: llega girando y se aprieta con un pequeño "clic" al final
+  Es de acero oscuro con aristas amarillas para que el texto blanco que pasa por encima se siga leyendo.
+*/
+.portada__tuerca {
+  position: absolute;
+  z-index: -1; /* encima de la foto, debajo del texto */
+  top: 50%;
+  right: -9vw;
+  width: min(54vw, 46rem);
+  aspect-ratio: 1;
+  margin-top: calc(min(54vw, 46rem) / -2);
+  transform: translateY(var(--baja, 0px)) rotate(var(--giro, 0deg));
+  will-change: transform;
+}
+
+.tuerca-grande {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45));
+}
+
+.tuerca-grande__brillo { stop-color: #33465e; }
+.tuerca-grande__sombra { stop-color: var(--tinta); }
+
+.tuerca-grande__cara {
+  fill: url(#tuerca-cara);
+  fill-opacity: 0.88;
+}
+
+.tuerca-grande__aristas {
+  fill: none;
+  stroke: var(--amarillo);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.tuerca-grande__chaflan {
+  fill: none;
+  stroke: var(--amarillo);
+  stroke-width: 1;
+  stroke-opacity: 0.55;
+}
+
+.tuerca-grande__agujero {
+  fill: #0b131d;
+  stroke: var(--amarillo);
+  stroke-width: 2.5;
+}
+
+.tuerca-grande__rosca {
+  fill: none;
+  stroke: var(--amarillo);
+  stroke-width: 1.2;
+  stroke-opacity: 0.45;
+  stroke-dasharray: 3 4;
+}
+
+.tuerca-grande__reflejo {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-opacity: 0.18;
+}
+
+.js .tuerca-grande {
+  animation: atornilla 1.5s var(--ease-sello) 100ms backwards;
+}
+
+/* Llega grande y girando (vuelta y media) y se aprieta en su sitio */
+@keyframes atornilla {
+  from { opacity: 0; transform: scale(1.5) rotate(-540deg); }
+  30% { opacity: 1; }
+}
+
+/* En móvil queda detrás del titular: más pequeña y más apagada */
+@media (max-width: 640px) {
+  .portada__tuerca {
+    top: 30%;
+    right: -30vw;
+    width: 85vw;
+    margin-top: -42.5vw;
+    opacity: 0.55;
+  }
+}
+
 /* El parte llega torcido y se posa en su inclinación normal */
 .js .solicitud .parte {
   animation: parte-aterriza 0.9s var(--ease-salida) 550ms backwards;

@@ -69,6 +69,25 @@
       <!-- La foto va en CSS (.portada__fondo). Para cambiarla, mira css/estilos.css -->
       <div class="portada__fondo" aria-hidden="true"></div>
 
+      <!-- La tuerca grande: entra atornillándose al cargar y gira con el scroll (docs/animaciones.md) -->
+      <div class="portada__tuerca" aria-hidden="true">
+        <svg class="tuerca-grande" viewBox="-100 -100 200 200">
+          <defs>
+            <linearGradient id="tuerca-cara" x1="0" y1="-1" x2="0" y2="1">
+              <stop offset="0" class="tuerca-grande__brillo" />
+              <stop offset="1" class="tuerca-grande__sombra" />
+            </linearGradient>
+          </defs>
+          <polygon class="tuerca-grande__cara" points="0,-96 83.1,-48 83.1,48 0,96 -83.1,48 -83.1,-48" />
+          <polygon class="tuerca-grande__aristas" points="0,-96 83.1,-48 83.1,48 0,96 -83.1,48 -83.1,-48" />
+          <circle class="tuerca-grande__chaflan" r="78" />
+          <circle class="tuerca-grande__agujero" r="40" />
+          <circle class="tuerca-grande__rosca" r="44" />
+          <circle class="tuerca-grande__rosca" r="34" />
+          <path class="tuerca-grande__reflejo" d="M -52 -62 A 80 80 0 0 1 40 -70" />
+        </svg>
+      </div>
+
       <div class="contenedor portada__contenido">
         <h1 class="portada__h1">
           <span class="portada__servicios" data-config="lineaServicios">Electricidad, fontanería y climatización</span>

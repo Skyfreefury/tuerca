@@ -10,7 +10,7 @@ cuentan esa misma historia con objetos de taller, no con efectos genéricos:
 
 | Metáfora | Qué hace | Dónde está |
 | --- | --- | --- |
-| **La tuerca se aprieta** | el hexágono del logo gira con el scroll | `.marca__icono polygon` + `prepararTuerca()` |
+| **La tuerca se aprieta** | la tuerca grande de la portada llega girando y se aprieta con un "clic"; con el scroll se afloja (gira al revés y baja en parallax). El hexágono del logo también gira con el scroll | `.portada__tuerca`, `.tuerca-grande` · `@keyframes atornilla` · `prepararTuerca()` |
 | **La hoja cae en la mesa** | el parte llega torcido y se posa | `.solicitud .parte` · `@keyframes parte-aterriza` |
 | **Se escribe a boli** | ticks y renglones se trazan de izquierda a derecha | `@keyframes tick`, `@keyframes renglones` |
 | **El sello** | algo cae grande y girado, y se posa con un pequeño rebote | números de "Cómo funciona", X de las casillas (`@keyframes sello`) |
