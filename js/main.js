@@ -223,23 +223,173 @@ function prepararCabecera() {
   actualizar();
 }
 
-/* ---------- 7b. Las tuercas giran con el scroll ---------- */
-// La del logo: un cuarto de grado por píxel (una vuelta cada 1440 px).
-// La grande de la portada: gira en sentido contrario, como si se aflojara, y baja a un tercio
-// de la velocidad de la página (parallax). Solo se tocan variables CSS, una vez por fotograma.
+/* ---------- 7a. La tuerca en 3D de la portada ---------- */
+// Monta las caras de un prisma hexagonal (ver .tuerca3d en estilos.css), las ilumina y la mueve:
+// - al cargar llega girando desde lejos y se aprieta en su sitio con un pequeño rebote;
+// - con el scroll se afloja (gira) y baja más despacio que la página;
+// - en escritorio se inclina un poco hacia el ratón.
+// Todo se dibuja en un único requestAnimationFrame que se para solo cuando no hay nada que mover.
+function prepararTuerca3d() {
+  const caja = $(".portada__tuerca");
+  const pieza = $(".tuerca3d");
+  if (!caja || !pieza || !window.DOMMatrix) return;
+  const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // 1. Las caras. Medidas relativas al ancho S: radio del hexágono S/2, agujero 0,44 · S/2.
+  const S = caja.offsetWidth;
+  const R = S / 2;
+  const apotema = R * Math.cos(Math.PI / 6);
+  const grosor = S * 0.21;
+  const radioAgujero = R * 0.44;
+  const tiras = 18;
+  const caras = [];
+  const cara = (clase, transform, tipo) => {
+    const el = document.createElement("div");
+    el.className = clase;
+    el.style.transform = transform;
+    pieza.append(el);
+    // La normal de la cara (hacia dónde mira), calculada con la misma matriz que usa el navegador
+    const m = new DOMMatrix(transform);
+    const a = m.transformPoint(new DOMPoint(0, 0, 0));
+    const b = m.transformPoint(new DOMPoint(0, 0, 1));
+    caras.push({ el, tipo, n: [b.x - a.x, b.y - a.y, b.z - a.z] });
+  };
+  cara("tuerca3d__cara", `translateZ(${grosor / 2}px)`, "metal");
+  cara("tuerca3d__cara", `rotateY(180deg) translateZ(${grosor / 2}px)`, "metal");
+  for (let i = 0; i < 6; i++) {
+    cara("tuerca3d__lado", `rotateZ(${30 + i * 60}deg) translateY(${-apotema}px) rotateX(90deg)`, "metal");
+  }
+  pieza.style.setProperty("--w", `${((2 * Math.PI * radioAgujero) / tiras) * 1.08}px`);
+  for (let i = 0; i < tiras; i++) {
+    cara("tuerca3d__rosca", `rotateZ(${(i * 360) / tiras}deg) translateY(${-radioAgujero}px) rotateX(-90deg)`, "rosca");
+  }
+
+  // 2. La luz: viene de arriba a la izquierda y un poco de delante (x derecha, y abajo, z hacia ti)
+  const luz = (() => {
+    const v = [-0.5, -0.75, 0.9];
+    const l = Math.hypot(...v);
+    return v.map((c) => c / l);
+  })();
+  const amarillo = [246, 201, 69];
+  const oscuro = [58, 44, 12];
+  const roscaClara = [120, 98, 40];
+  const roscaOscura = [12, 18, 28];
+  const mezcla = (a, b, t) => a.map((c, i) => Math.round(c + (b[i] - c) * t));
+
+  // 3. El estado y el dibujo
+  const reposo = { rx: -22, ry: 28, rz: 0 };
+  const estado = { rx: reposo.rx, ry: reposo.ry, rz: 0, escala: 1, opacidad: 1 };
+  const raton = { x: 0, y: 0, ax: 0, ay: 0 }; // destino y valor actual (suavizado)
+  let scrollGiro = 0;
+  let inicioEntrada = reducido ? null : performance.now();
+  const DURACION = 1800;
+
+  const dibujar = () => {
+    const rx = estado.rx + raton.ay;
+    const ry = estado.ry + raton.ax;
+    const rz = estado.rz + scrollGiro;
+    pieza.style.setProperty("--rx", `${rx}deg`);
+    pieza.style.setProperty("--ry", `${ry}deg`);
+    pieza.style.setProperty("--rz", `${rz}deg`);
+    caja.style.setProperty("--escala", estado.escala);
+    caja.style.setProperty("--opacidad", estado.opacidad);
+
+    const giro = new DOMMatrix(`rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`);
+    for (const c of caras) {
+      const p = giro.transformPoint(new DOMPoint(c.n[0], c.n[1], c.n[2]));
+      const d = p.x * luz[0] + p.y * luz[1] + p.z * luz[2];
+      const difusa = Math.max(0, d);
+      let color;
+      if (c.tipo === "metal") {
+        color = mezcla(oscuro, amarillo, 0.3 + 0.7 * difusa);
+        color = mezcla(color, [255, 250, 230], Math.pow(difusa, 12) * 0.6); // brillo metálico
+      } else {
+        // La rosca recibe la luz de dentro hacia fuera: más apagada
+        color = mezcla(roscaOscura, roscaClara, 0.15 + 0.85 * Math.max(0, -d) * 0.8 + difusa * 0.4);
+      }
+      c.el.style.setProperty("--c", `rgb(${color.join(",")})`);
+    }
+  };
+
+  // Curvas: la entrada se frena al final (salida cúbica) y el giro se pasa un poco y vuelve (el "clic")
+  const salida = (t) => 1 - Math.pow(1 - t, 3);
+  const rebote = (t) => {
+    const k = 1.6;
+    return 1 + (k + 1) * Math.pow(t - 1, 3) + k * Math.pow(t - 1, 2);
+  };
+
+  let pedido = false;
+  const fotograma = (ahora) => {
+    pedido = false;
+    let seguir = false;
+
+    if (inicioEntrada !== null) {
+      const t = Math.min((ahora - inicioEntrada) / DURACION, 1);
+      const e = salida(t);
+      estado.rx = -75 + (reposo.rx + 75) * e;
+      estado.ry = 160 + (reposo.ry - 160) * e;
+      estado.rz = -540 * (1 - rebote(t));
+      estado.escala = 0.35 + 0.65 * salida(Math.min(t * 1.4, 1));
+      estado.opacidad = Math.min(t * 4, 1);
+      if (t < 1) seguir = true;
+      else inicioEntrada = null;
+    }
+
+    // El ratón: se acerca un 12 % del camino en cada fotograma
+    raton.ax += (raton.x - raton.ax) * 0.12;
+    raton.ay += (raton.y - raton.ay) * 0.12;
+    if (Math.abs(raton.x - raton.ax) > 0.05 || Math.abs(raton.y - raton.ay) > 0.05) seguir = true;
+
+    dibujar();
+    if (seguir) pedir();
+  };
+  const pedir = () => {
+    if (pedido) return;
+    pedido = true;
+    requestAnimationFrame(fotograma);
+  };
+
+  dibujar();
+  if (reducido) return; // quieta, en su postura de reposo, ya iluminada
+
+  pedir();
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const y = window.scrollY;
+      if (y > window.innerHeight * 1.5) return; // pasada la portada no se ve
+      scrollGiro = y * -0.3; // se afloja: gira al revés que al apretarla
+      caja.style.setProperty("--baja", `${y * 0.35}px`);
+      pedir();
+    },
+    { passive: true }
+  );
+
+  // Inclinación hacia el ratón, solo con ratón de verdad (no en pantallas táctiles)
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    $(".portada").addEventListener("pointermove", (e) => {
+      raton.x = (e.clientX / window.innerWidth - 0.5) * 24;
+      raton.y = -(e.clientY / window.innerHeight - 0.5) * 18;
+      pedir();
+    });
+    $(".portada").addEventListener("pointerleave", () => {
+      raton.x = raton.y = 0;
+      pedir();
+    });
+  }
+}
+
+/* ---------- 7b. La tuerca del logo gira con el scroll ---------- */
+// Un cuarto de grado por píxel: una vuelta entera cada 1440 px. Solo se toca una variable CSS
+// y una vez por fotograma (requestAnimationFrame), así el scroll no se resiente.
 function prepararTuerca() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const icono = $(".marca__icono");
-  const grande = $(".portada__tuerca");
+  if (!icono) return;
   let pendiente = false;
   const girar = () => {
-    const y = window.scrollY;
-    if (icono) icono.style.setProperty("--giro", `${(y * 0.25) % 360}deg`);
-    // Pasada la portada ya no se ve: no hace falta moverla
-    if (grande && y < window.innerHeight * 1.5) {
-      grande.style.setProperty("--giro", `${y * -0.2}deg`);
-      grande.style.setProperty("--baja", `${y * 0.35}px`);
-    }
+    icono.style.setProperty("--giro", `${(window.scrollY * 0.25) % 360}deg`);
     pendiente = false;
   };
   window.addEventListener(
@@ -365,6 +515,7 @@ function prepararContadores() {
 /* ---------- Arranque ---------- */
 prepararCabecera();
 prepararTuerca();
+prepararTuerca3d();
 pintarConfig();
 pintarOpcionesServicio();
 pintarConsejos();

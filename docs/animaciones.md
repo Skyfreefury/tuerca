@@ -10,7 +10,7 @@ cuentan esa misma historia con objetos de taller, no con efectos genéricos:
 
 | Metáfora | Qué hace | Dónde está |
 | --- | --- | --- |
-| **La tuerca se aprieta** | la tuerca grande de la portada llega girando y se aprieta con un "clic"; con el scroll se afloja (gira al revés y baja en parallax). El hexágono del logo también gira con el scroll | `.portada__tuerca`, `.tuerca-grande` · `@keyframes atornilla` · `prepararTuerca()` |
+| **La tuerca se aprieta** | una tuerca en 3D en la portada: llega girando y se aprieta con un "clic"; con el scroll se afloja y baja en parallax; en escritorio se inclina hacia el ratón. El hexágono del logo también gira con el scroll | `.portada__tuerca`, `.tuerca3d` · `prepararTuerca3d()`, `prepararTuerca()` |
 | **La hoja cae en la mesa** | el parte llega torcido y se posa | `.solicitud .parte` · `@keyframes parte-aterriza` |
 | **Se escribe a boli** | ticks y renglones se trazan de izquierda a derecha | `@keyframes tick`, `@keyframes renglones` |
 | **El sello** | algo cae grande y girado, y se posa con un pequeño rebote | números de "Cómo funciona", X de las casillas (`@keyframes sello`) |
@@ -99,6 +99,21 @@ el.style.animation = "none";
 void el.offsetWidth; // fuerza al navegador a "olvidarla"
 el.style.animation = "";
 ```
+
+### Una pieza en 3D
+
+Se hace con CSS 3D, sin WebGL ni librerías: un contenedor con `perspective`, la pieza con
+`transform-style: preserve-3d` y cada cara como un `div` con su propio `transform` (ejemplo completo: la tuerca,
+`.tuerca3d` y `prepararTuerca3d()`).
+
+- Las caras con `backface-visibility: hidden`, así no se ve la de detrás a través de la de delante.
+- La luz se calcula en JS: la normal de cada cara se saca con `DOMMatrix` a partir del mismo `transform`
+  que usa el navegador, se gira con la postura actual y su producto con la dirección de la luz da el color.
+- Nunca pongas `filter`, `opacity` < 1 ni `overflow: hidden` en un elemento con `preserve-3d`: aplanan la pieza.
+  Las sombras van en un elemento aparte (`.tuerca3d__sombra`).
+- Un solo bucle `requestAnimationFrame` que se para solo cuando ya no hay nada que mover; con
+  `prefers-reduced-motion` se dibuja una vez en su postura de reposo.
+- Tamaño contenido (la tuerca no pasa de 15rem) y siempre por detrás del texto (`z-index: -1`).
 
 ### Algo ligado al scroll
 
