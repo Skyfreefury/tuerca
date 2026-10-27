@@ -32,7 +32,8 @@ tuerca/
 │   ├── trabajos/         Fotos de trabajos hechos (se enlazan desde TRABAJOS en datos.js)
 │   └── equipo/           Fotos de las personas del negocio
 └── docs/
-    └── pendientes.md     Datos que faltan por pedir al negocio
+    ├── pendientes.md     Datos que faltan por pedir al negocio
+    └── animaciones.md    Cómo se mueve la web y reglas para animar cosas nuevas
 ```
 
 ## Cómo se trabaja

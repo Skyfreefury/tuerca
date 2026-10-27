@@ -48,6 +48,15 @@
   --radio: 6px;
 
   --fuente: "Archivo", system-ui, sans-serif;
+
+  /* Movimiento: todas las animaciones salen de aquí (guía en docs/animaciones.md) */
+  --dur-rapida: 160ms;     /* respuesta a un clic o a marcar una casilla */
+  --dur-media: 320ms;      /* abrir, cerrar, cambiar de estado */
+  --dur-lenta: 700ms;      /* entradas al hacer scroll y al cargar */
+  --escalon: 120ms;        /* retraso entre elementos hermanos */
+  --ease-salida: cubic-bezier(0.2, 0.7, 0.2, 1);  /* arranca rápido y se posa: el normal */
+  --ease-sello: cubic-bezier(0.3, 1.4, 0.5, 1);   /* se pasa un poco y vuelve: sellos y casillas */
+  --ease-mecanica: cubic-bezier(0.4, 0, 0.2, 1);  /* botones e interruptores */
 }
 
 /* ---------- Base ---------- */
@@ -865,8 +874,8 @@ a {
   transform: translateY(2.5rem);
   transition:
     opacity 0.6s ease,
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-  transition-delay: calc(var(--i, 0) * 120ms);
+    transform var(--dur-lenta) var(--ease-salida);
+  transition-delay: calc(var(--i, 0) * var(--escalon));
 }
 
 .js .revela.revela--visto {
@@ -891,7 +900,7 @@ a {
 .js .paso::before {
   transform: scaleX(0);
   transition: transform 0.8s ease;
-  transition-delay: calc(var(--i, 0) * 120ms + 0.25s);
+  transition-delay: calc(var(--i, 0) * var(--escalon) + 0.25s);
 }
 
 .js .paso.revela--visto::before {
@@ -903,14 +912,238 @@ a {
   opacity: 0;
   transform-origin: left bottom;
   transition:
-    transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1),
+    transform 0.5s var(--ease-sello),
     opacity 0.3s ease;
-  transition-delay: calc(var(--i, 0) * 120ms + 0.35s);
+  transition-delay: calc(var(--i, 0) * var(--escalon) + 0.35s);
 }
 
 .js .paso.revela--visto .paso__numero {
   transform: none;
   opacity: 1;
+}
+
+/* ---------- Entrada de la portada al cargar ---------- */
+/*
+  Una sola secuencia, en este orden: la foto se asienta, sube la línea de servicios,
+  el titular se destapa de abajo arriba, luego la entradilla, los botones y las garantías
+  (cada tick se "escribe" a boli). A la vez, el parte cae sobre la foto como una hoja.
+  --d es el retraso de cada pieza. fill-mode "backwards": al acabar no queda ningún estilo puesto.
+*/
+.portada {
+  overflow: clip; /* la foto escalada no debe crear scroll horizontal */
+}
+
+.js .portada__fondo {
+  animation: fondo-asienta 1.6s var(--ease-salida) backwards;
+}
+
+.js .portada__servicios,
+.js .portada__entradilla,
+.js .portada__acciones,
+.js .portada__garantias li {
+  animation: sube var(--dur-lenta) var(--ease-salida) var(--d, 0ms) backwards;
+}
+
+.js .portada__servicios { --d: 150ms; }
+.js .portada__entradilla { --d: 650ms; }
+.js .portada__acciones { --d: 780ms; }
+.js .portada__garantias li { --d: calc(950ms + var(--i, 0) * var(--escalon)); }
+.portada__garantias li:nth-child(2) { --i: 1; }
+.portada__garantias li:nth-child(3) { --i: 2; }
+
+.js .portada__titulo {
+  animation: destapa 0.9s var(--ease-salida) 280ms backwards;
+}
+
+.js .portada__garantias li::before {
+  transform-origin: left bottom;
+  animation: tick 0.45s var(--ease-sello) calc(var(--d) + 250ms) backwards;
+}
+
+/*
+  LA TUERCA EN 3D (portada)
+  Un prisma hexagonal de verdad hecho con CSS 3D: dos caras con agujero, seis laterales y la rosca
+  por dentro en tiras. main.js monta las caras, las ilumina según hacia dónde mire cada una
+  y mueve la tuerca (--rx, --ry, --rz). Sin librerías.
+  Capas: .portada__tuerca (posición, perspectiva y parallax con --baja) › .tuerca3d (la pieza que gira).
+*/
+.portada__tuerca {
+  --s: clamp(10rem, 16vw, 15rem);      /* ancho de la tuerca */
+  --t: calc(var(--s) * 0.21);          /* grosor */
+  position: absolute;
+  z-index: -1; /* encima de la foto, debajo del texto */
+  right: max(2rem, 9vw);
+  bottom: 12.5rem; /* entre el titular y la fila de garantías */
+  width: var(--s);
+  height: var(--s);
+  perspective: 900px;
+  transform: translateY(var(--baja, 0px));
+  opacity: var(--opacidad, 1); /* aquí y no en .tuerca3d: en la pieza 3D la aplanaría */
+  pointer-events: none;
+}
+
+.tuerca3d {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: scale(var(--escala, 1)) rotateX(var(--rx, -22deg)) rotateY(var(--ry, 28deg)) rotateZ(var(--rz, 0deg));
+}
+
+/* Todas las caras salen del centro; cada una lleva su propio transform (lo pone main.js) */
+.tuerca3d > * {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  backface-visibility: hidden;
+  background-color: var(--c, var(--amarillo));
+}
+
+/* Las dos caras hexagonales, con el agujero recortado y el chaflán como un anillo */
+.tuerca3d__cara {
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  -webkit-mask: radial-gradient(circle closest-side, transparent 44%, #000 calc(44% + 1px));
+  mask: radial-gradient(circle closest-side, transparent 44%, #000 calc(44% + 1px));
+  background-image:
+    radial-gradient(circle closest-side, transparent 47%, rgba(255, 255, 255, 0.35) 49%, transparent 54%),
+    radial-gradient(circle closest-side, transparent 80%, rgba(0, 0, 0, 0.14) 81% 82.5%, rgba(255, 255, 255, 0.12) 83.5%, transparent 85%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.28), transparent 45%, rgba(0, 0, 0, 0.12));
+}
+
+.tuerca3d__lado {
+  width: calc(var(--s) / 2 + 1px);
+  height: var(--t);
+  margin: calc(var(--t) / -2) 0 0 calc(var(--s) / -4 - 0.5px);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), transparent 22% 78%, rgba(0, 0, 0, 0.2));
+}
+
+/* La rosca: tiras finas por dentro del agujero, con las vueltas del hilo dibujadas */
+.tuerca3d__rosca {
+  width: var(--w);
+  height: var(--t);
+  margin: calc(var(--t) / -2) 0 0 calc(var(--w) / -2);
+  background-image: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 6px);
+}
+
+/* Sombra en el suelo, aparte para no romper el 3D (un filter aplanaría la pieza) */
+.tuerca3d__sombra {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -18%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent);
+  transform: scale(var(--escala, 1));
+}
+
+/* En móvil: pequeña, arriba a la derecha, en el hueco sobre el titular */
+@media (max-width: 640px) {
+  .portada__tuerca {
+    --s: 6.5rem;
+    top: 5.5rem;
+    right: 1.25rem;
+    bottom: auto;
+  }
+}
+
+/* El parte llega torcido y se posa en su inclinación normal */
+.js .solicitud .parte {
+  animation: parte-aterriza 0.9s var(--ease-salida) 550ms backwards;
+}
+
+/* Los renglones de la descripción se trazan de izquierda a derecha */
+.parte textarea {
+  background-repeat: repeat-y;
+}
+
+.js .parte textarea {
+  animation: renglones 0.9s var(--ease-salida) 1.2s backwards;
+}
+
+@keyframes fondo-asienta {
+  from { opacity: 0; transform: scale(1.06); }
+}
+
+@keyframes sube {
+  from { opacity: 0; transform: translateY(1.25rem); }
+}
+
+@keyframes destapa {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(0.25em); }
+  to { clip-path: inset(-20% -5% -20% -5%); transform: none; }
+}
+
+@keyframes tick {
+  from { opacity: 0; transform: rotate(40deg) scale(0); }
+}
+
+/* Sin "to": acaba en la inclinación que tenga el parte (0.6deg en escritorio, recto en móvil) */
+@keyframes parte-aterriza {
+  from { opacity: 0; transform: translateY(3rem) rotate(-2deg); }
+}
+
+@keyframes renglones {
+  from { background-size: 0% 2rem; }
+}
+
+/* ---------- Respuestas al tocar ---------- */
+
+/* La tuerca del logo gira al hacer scroll, como si se apretara (main.js pone --giro) */
+.marca__icono polygon {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transform: rotate(var(--giro, 0deg));
+}
+
+/* Botones: un "clic" de interruptor, se hunden 1px al pulsar */
+.boton {
+  transition:
+    background-color var(--dur-rapida) ease,
+    transform var(--dur-rapida) var(--ease-mecanica);
+}
+
+.boton:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.boton--principal:hover {
+  transform: translateY(-1px);
+}
+
+/* Casillas del parte: la X cae como un sello al marcarla */
+.opcion span {
+  transition:
+    border-color var(--dur-rapida) ease,
+    color var(--dur-rapida) ease;
+}
+
+.opcion input:checked + span::before {
+  animation: sello var(--dur-media) var(--ease-sello);
+}
+
+@keyframes sello {
+  from { transform: scale(1.6) rotate(-12deg); opacity: 0; }
+}
+
+/* El aviso de error da un pequeño meneo (main.js lo repite en cada intento) */
+.parte__error:not([hidden]) {
+  animation: meneo 0.4s var(--ease-mecanica);
+}
+
+@keyframes meneo {
+  0%, 100% { transform: none; }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Cifras de "Quiénes somos": cuentan hacia arriba al verse (main.js) */
+.sobre__datos dd {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Confianza ---------- */
@@ -1565,5 +1798,21 @@ a {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* Red de seguridad: ninguna animación ni transición, aunque se añadan nuevas */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .boton:active,
+  .boton--principal:hover {
+    transform: none;
   }
 }
