@@ -190,6 +190,10 @@ function prepararFormulario() {
     if (faltan.length) {
       error.textContent = `Para darte precio necesitamos que ${faltan.join(" y ")}.`;
       error.hidden = false;
+      // Repite el meneo del aviso aunque ya estuviera a la vista (ver .parte__error en estilos.css)
+      error.style.animation = "none";
+      void error.offsetWidth;
+      error.style.animation = "";
       return;
     }
     error.hidden = true;
@@ -217,6 +221,30 @@ function prepararCabecera() {
     cabecera.classList.toggle("cabecera--solida", window.scrollY > 40);
   window.addEventListener("scroll", actualizar, { passive: true });
   actualizar();
+}
+
+/* ---------- 7b. La tuerca del logo gira con el scroll ---------- */
+// Un cuarto de grado por píxel: una vuelta entera cada 1440 px. Solo se toca una variable CSS
+// y una vez por fotograma (requestAnimationFrame), así el scroll no se resiente.
+function prepararTuerca() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const icono = $(".marca__icono");
+  if (!icono) return;
+  let pendiente = false;
+  const girar = () => {
+    icono.style.setProperty("--giro", `${(window.scrollY * 0.25) % 360}deg`);
+    pendiente = false;
+  };
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(girar);
+    },
+    { passive: true }
+  );
+  girar();
 }
 
 /* ---------- 8. Menú de móvil ---------- */
@@ -284,8 +312,52 @@ function prepararAnimaciones() {
   elementos.forEach((el) => observador.observe(el));
 }
 
+/* ---------- 10. Cifras que cuentan hacia arriba ---------- */
+// "10+", "500+", "24 h": se anima solo el número del principio y se deja el resto tal cual.
+// El texto final ya está en el HTML (lo ven Google y quien no tenga JS); aquí solo se cuenta hasta él.
+function prepararContadores() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!("IntersectionObserver" in window)) return;
+
+  const contar = (el) => {
+    const final = el.textContent;
+    const partes = final.match(/^(\d+)(.*)$/s);
+    if (!partes) return;
+    const objetivo = Number(partes[1]);
+    const resto = partes[2];
+    const duracion = 1200;
+    // Se fija el ancho para que el texto de al lado no baile mientras cambian las cifras
+    el.style.minWidth = `${el.offsetWidth}px`;
+    const inicio = performance.now();
+    const paso = (ahora) => {
+      const t = Math.min((ahora - inicio) / duracion, 1);
+      const suave = 1 - Math.pow(1 - t, 3); // ease-out cúbico: rápido al principio, se posa al final
+      el.textContent = `${Math.round(objetivo * suave)}${resto}`;
+      if (t < 1) requestAnimationFrame(paso);
+      else {
+        el.textContent = final;
+        el.style.minWidth = "";
+      }
+    };
+    requestAnimationFrame(paso);
+  };
+
+  const observador = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        contar(entrada.target);
+        observador.unobserve(entrada.target);
+      });
+    },
+    { threshold: 0.6 }
+  );
+  $$(".sobre__datos dd").forEach((el) => observador.observe(el));
+}
+
 /* ---------- Arranque ---------- */
 prepararCabecera();
+prepararTuerca();
 pintarConfig();
 pintarOpcionesServicio();
 pintarConsejos();
@@ -303,3 +375,4 @@ prepararMenu();
 prepararWhatsappFlotante();
 // Las animaciones van al final: hay que esperar a que todas las tarjetas existan
 prepararAnimaciones();
+prepararContadores();

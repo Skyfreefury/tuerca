@@ -48,6 +48,15 @@
   --radio: 6px;
 
   --fuente: "Archivo", system-ui, sans-serif;
+
+  /* Movimiento: todas las animaciones salen de aquí (guía en docs/animaciones.md) */
+  --dur-rapida: 160ms;     /* respuesta a un clic o a marcar una casilla */
+  --dur-media: 320ms;      /* abrir, cerrar, cambiar de estado */
+  --dur-lenta: 700ms;      /* entradas al hacer scroll y al cargar */
+  --escalon: 120ms;        /* retraso entre elementos hermanos */
+  --ease-salida: cubic-bezier(0.2, 0.7, 0.2, 1);  /* arranca rápido y se posa: el normal */
+  --ease-sello: cubic-bezier(0.3, 1.4, 0.5, 1);   /* se pasa un poco y vuelve: sellos y casillas */
+  --ease-mecanica: cubic-bezier(0.4, 0, 0.2, 1);  /* botones e interruptores */
 }
 
 /* ---------- Base ---------- */
@@ -865,8 +874,8 @@ a {
   transform: translateY(2.5rem);
   transition:
     opacity 0.6s ease,
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-  transition-delay: calc(var(--i, 0) * 120ms);
+    transform var(--dur-lenta) var(--ease-salida);
+  transition-delay: calc(var(--i, 0) * var(--escalon));
 }
 
 .js .revela.revela--visto {
@@ -891,7 +900,7 @@ a {
 .js .paso::before {
   transform: scaleX(0);
   transition: transform 0.8s ease;
-  transition-delay: calc(var(--i, 0) * 120ms + 0.25s);
+  transition-delay: calc(var(--i, 0) * var(--escalon) + 0.25s);
 }
 
 .js .paso.revela--visto::before {
@@ -903,14 +912,149 @@ a {
   opacity: 0;
   transform-origin: left bottom;
   transition:
-    transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1),
+    transform 0.5s var(--ease-sello),
     opacity 0.3s ease;
-  transition-delay: calc(var(--i, 0) * 120ms + 0.35s);
+  transition-delay: calc(var(--i, 0) * var(--escalon) + 0.35s);
 }
 
 .js .paso.revela--visto .paso__numero {
   transform: none;
   opacity: 1;
+}
+
+/* ---------- Entrada de la portada al cargar ---------- */
+/*
+  Una sola secuencia, en este orden: la foto se asienta, sube la línea de servicios,
+  el titular se destapa de abajo arriba, luego la entradilla, los botones y las garantías
+  (cada tick se "escribe" a boli). A la vez, el parte cae sobre la foto como una hoja.
+  --d es el retraso de cada pieza. fill-mode "backwards": al acabar no queda ningún estilo puesto.
+*/
+.portada {
+  overflow: clip; /* la foto escalada no debe crear scroll horizontal */
+}
+
+.js .portada__fondo {
+  animation: fondo-asienta 1.6s var(--ease-salida) backwards;
+}
+
+.js .portada__servicios,
+.js .portada__entradilla,
+.js .portada__acciones,
+.js .portada__garantias li {
+  animation: sube var(--dur-lenta) var(--ease-salida) var(--d, 0ms) backwards;
+}
+
+.js .portada__servicios { --d: 150ms; }
+.js .portada__entradilla { --d: 650ms; }
+.js .portada__acciones { --d: 780ms; }
+.js .portada__garantias li { --d: calc(950ms + var(--i, 0) * var(--escalon)); }
+.portada__garantias li:nth-child(2) { --i: 1; }
+.portada__garantias li:nth-child(3) { --i: 2; }
+
+.js .portada__titulo {
+  animation: destapa 0.9s var(--ease-salida) 280ms backwards;
+}
+
+.js .portada__garantias li::before {
+  transform-origin: left bottom;
+  animation: tick 0.45s var(--ease-sello) calc(var(--d) + 250ms) backwards;
+}
+
+/* El parte llega torcido y se posa en su inclinación normal */
+.js .solicitud .parte {
+  animation: parte-aterriza 0.9s var(--ease-salida) 550ms backwards;
+}
+
+/* Los renglones de la descripción se trazan de izquierda a derecha */
+.parte textarea {
+  background-repeat: repeat-y;
+}
+
+.js .parte textarea {
+  animation: renglones 0.9s var(--ease-salida) 1.2s backwards;
+}
+
+@keyframes fondo-asienta {
+  from { opacity: 0; transform: scale(1.06); }
+}
+
+@keyframes sube {
+  from { opacity: 0; transform: translateY(1.25rem); }
+}
+
+@keyframes destapa {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(0.25em); }
+  to { clip-path: inset(-20% -5% -20% -5%); transform: none; }
+}
+
+@keyframes tick {
+  from { opacity: 0; transform: rotate(40deg) scale(0); }
+}
+
+/* Sin "to": acaba en la inclinación que tenga el parte (0.6deg en escritorio, recto en móvil) */
+@keyframes parte-aterriza {
+  from { opacity: 0; transform: translateY(3rem) rotate(-2deg); }
+}
+
+@keyframes renglones {
+  from { background-size: 0% 2rem; }
+}
+
+/* ---------- Respuestas al tocar ---------- */
+
+/* La tuerca del logo gira al hacer scroll, como si se apretara (main.js pone --giro) */
+.marca__icono polygon {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transform: rotate(var(--giro, 0deg));
+}
+
+/* Botones: un "clic" de interruptor, se hunden 1px al pulsar */
+.boton {
+  transition:
+    background-color var(--dur-rapida) ease,
+    transform var(--dur-rapida) var(--ease-mecanica);
+}
+
+.boton:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.boton--principal:hover {
+  transform: translateY(-1px);
+}
+
+/* Casillas del parte: la X cae como un sello al marcarla */
+.opcion span {
+  transition:
+    border-color var(--dur-rapida) ease,
+    color var(--dur-rapida) ease;
+}
+
+.opcion input:checked + span::before {
+  animation: sello var(--dur-media) var(--ease-sello);
+}
+
+@keyframes sello {
+  from { transform: scale(1.6) rotate(-12deg); opacity: 0; }
+}
+
+/* El aviso de error da un pequeño meneo (main.js lo repite en cada intento) */
+.parte__error:not([hidden]) {
+  animation: meneo 0.4s var(--ease-mecanica);
+}
+
+@keyframes meneo {
+  0%, 100% { transform: none; }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Cifras de "Quiénes somos": cuentan hacia arriba al verse (main.js) */
+.sobre__datos dd {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Confianza ---------- */
@@ -1565,5 +1709,21 @@ a {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* Red de seguridad: ninguna animación ni transición, aunque se añadan nuevas */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .boton:active,
+  .boton--principal:hover {
+    transform: none;
   }
 }
